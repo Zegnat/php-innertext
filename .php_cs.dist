@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'native_function_invocation' => true,
+        'ordered_imports' => true,
+        'declare_strict_types' => true,
+    ])
+    ->setRiskyAllowed(true)
+    ->setUsingCache(false)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in(__DIR__)
+            ->name('*.php')
+    );

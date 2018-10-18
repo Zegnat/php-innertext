@@ -1,0 +1,34 @@
+{
+    "name": "zegnat/innertext",
+    "type": "project",
+    "description": "",
+    "keywords": [
+        "HTML",
+        "CSS",
+        "plaintext"
+    ],
+    "homepage": "https://github.com/Zegnat/php-innertext",
+    "license": "0BSD",
+    "authors": [
+        {
+            "name": "Martijn van der Ven",
+            "email": "martijn@vanderven.se",
+            "homepage": "https://vanderven.se/martijn/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "~7.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "phpunit/phpunit": "^7.4"
+    },
+    "scripts": {
+        "fix-style": "php-cs-fixer fix",
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
