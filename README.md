@@ -4,6 +4,8 @@ This is an approximate implementation of [the WHATWG innerText attribute](https:
 
 For whitespace normalisation this emulates [the white space processing rules](https://drafts.csswg.org/css-text/#white-space-rules) from the CSS Text Module Level 3 specification, currently a draft from the CSS Working Group at W3C.
 
+A second independent implement of these ideas in Python is available as well: [sknebel/python-innertext](https://github.com/sknebel/python-innertext).
+
 ## Annotated Implementation
 
 ### innerText
