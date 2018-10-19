@@ -11,6 +11,8 @@ class Innertext
     const BLOCK_START = -1111111111;
     const BLOCK_END = -9999999999;
 
+    const PARAGRAPH_REQ_LINE_BREAKS = 1;
+
     public function __construct()
     {
     }
@@ -213,8 +215,8 @@ class Innertext
          * at the beginning and end of items.
          */
         if ('p' === \strtolower($node->nodeName)) {
-            \array_unshift($items, 2);
-            $items[] = 2;
+            \array_unshift($items, self::PARAGRAPH_REQ_LINE_BREAKS);
+            $items[] = self::PARAGRAPH_REQ_LINE_BREAKS;
         }
 
         /*
