@@ -100,13 +100,17 @@ Done! :D
 
 For ease of processing, it is recommended to replace all CRLF character combinations to LFs. CRLFs and LFs are both defined as segment breaks, and by normalising to one of the two the other steps only need to work on one.
 
+For all steps below we assume the `white-space` property of all nodes to be `normal`.
+
+Follow [Phase One of White Space Processing: Collapsing and Transformation](https://drafts.csswg.org/css-text/#white-space-phase-1).
+
 > 1. All spaces and tabs immediately preceding or following a segment break are removed.
 
 The word “spaces” here is assumed to mean only U+0020 SPACE characters, and “tabs” U+0009 CHARACTER TABULATION.
 
 > 2. Segment breaks are transformed for rendering according to the segment break transformation rules.
 
-This is the next section of the spec being included as step 2 of the process, the steps taken are:
+This is the next section of the spec being included as step 2 of the process, the steps taken are the [segment break transformation rules](https://drafts.csswg.org/css-text/#line-break-transform):
 
 > * As with spaces, any collapsible segment break immediately following another collapsible segment break is removed.
 
