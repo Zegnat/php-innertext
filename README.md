@@ -2,6 +2,8 @@
 
 This is an approximate implementation of [the WHATWG innerText attribute](https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-attribute) from a plain DOM, without any knowledge of rendering or CSS. This was drafted to be used as a replacement of the `textContent` DOM property in [microformats2](http://microformats.org/wiki/microformats2) parsers. So the outlay of a plaintext version of an element could still be easily displayed for reading without unexpected side-effects (like `<br>` elements disappearing).
 
+For whitespace normalisation this emulates [the white space processing rules](https://drafts.csswg.org/css-text/#white-space-rules) from the CSS Text Module Level 3 specification, currently a draft from the CSS Working Group at W3C.
+
 ## Annotated Implementation
 
 ### innerText
@@ -81,12 +83,61 @@ If node is an img element, then:
 This is implemented as described, with 2 assumptions:
 
 1. There is only one element that will have a `display` of `table-caption` and that is the `caption` element (per the [default CSS for tables](https://html.spec.whatwg.org/multipage/rendering.html#tables-2)).
-2. Elements are considered “block level” if they are on [MDN’s list of block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements).
+2. Elements are considered “block-level” if they are on [MDN’s list of block-level elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements).
 
 **EXTRA STEP: Whitespace handling**
 
-[………………]
+1. All successive string items in the items list that are not between `BLOCK_START` and `BLOCK_END` markers are merged into one item.
+2. If the current block is in “pre” mode, do not do anything with the merged string items.
+3. If the current block is not in “pre” mode, apply the Whiatespace Normalisation as described below to the merged string items.
+4. After merging the strings in items, prepend the list items with a BLOCK_START and append a BLOCK_END marker.
 
 > 10. Return items.
 
 Done! :D
+
+### whitespace normalisation
+
+For ease of processing, it is recommended to replace all CRLF character combinations to LFs. CRLFs and LFs are both defined as segment breaks, and by normalising to one of the two the other steps only need to work on one.
+
+> 1. All spaces and tabs immediately preceding or following a segment break are removed.
+
+The word “spaces” here is assumed to mean only U+0020 SPACE characters, and “tabs” U+0009 CHARACTER TABULATION.
+
+> 2. Segment breaks are transformed for rendering according to the segment break transformation rules.
+
+This is the next section of the spec being included as step 2 of the process, the steps taken are:
+
+> * As with spaces, any collapsible segment break immediately following another collapsible segment break is removed.
+
+This is implemented as collapsing all sequences of LF characters with single LF characters.
+
+> * If the character immediately before or immediately after the segment break is the zero-width space character (U+200B), then the break is removed, leaving behind the zero-width space.
+
+This is implemented as replacing all sequences `U+200B``U+000A` and `U+000A``U+200B` with just singular `U+200B`.
+
+> * Otherwise, if the East Asian Width property […]
+
+This is skipped to keep language recognition out of the implementation.
+
+> * Otherwise, if the content language of […]
+
+This too is skipped to keep language recognition out of the implementation.
+
+> * Otherwise, the segment break is converted to a space (U+0020).
+
+This is implemented as replacing any `U+000A` with `U+0020`.
+
+> 3. Every tab is converted to a space (U+0020).
+
+This is implemented as replacing any `U+0009` with `U+0020`.
+
+> 4. Any space immediately following another collapsible space […] is collapsed to have zero advance width.
+
+This is implemented as collapsing all sequences of space characters with single space characters.
+
+**EXTRA STEP: Removing leading and trailing space**
+
+Because of how this white space handling has been delayed in the inner text collection steps, we can be sure that any string begins and ends at a block border. This means they are either going to be surrounded by required line breaks or the start/end of the document.
+
+As hanging white space is removed around line breaks, we can do that here. This is implemented as stripping all leading and trailing space characters.
