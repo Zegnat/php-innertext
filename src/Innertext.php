@@ -108,6 +108,19 @@ class Innertext
      */
     private function textCollection(\DOMNode $node, bool $outer = false, bool $pre = false): array
     {
+        // The PHP parser includes a linebreak at the start of elements that should ignore them.
+        // https://html.spec.whatwg.org/multipage/syntax.html#element-restrictions
+        if (true === \in_array(\strtolower($node->nodeName), [
+            'pre',
+            'textarea',
+        ])
+            && null !== $node->firstChild
+            && XML_TEXT_NODE === $node->firstChild->nodeType
+            && "\n" === $node->firstChild->substringData(0, 1)
+        ) {
+            $node->firstChild->deleteData(0, 1);
+        }
+
         /*
          * Step 0:
          * Check wether current node toggle white-space pre.
