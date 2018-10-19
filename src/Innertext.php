@@ -20,7 +20,7 @@ class Innertext
     /**
      * @see https://html.spec.whatwg.org/multipage/dom.html#the-innertext-idl-attribute
      */
-    public function innerText(\DOMNode $node): string
+    public function innerText(\DOMElement $node): string
     {
         /**
          * Step 1:
